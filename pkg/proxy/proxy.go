@@ -1,11 +1,11 @@
 package proxy
 
 import ("fmt"
-        "github.com/Kalbi/pkg/sip/stack"
-        "github.com/Kalbi/pkg/sip/status"
-        "github.com/Kalbi/pkg/sip/method"
-        "github.com/Kalbi/pkg/sip/transaction"
-        "github.com/Kalbi/pkg/sip/message"
+        "github.com/KalbiProject/Kalbi/pkg/sip/stack"
+        "github.com/KalbiProject/Kalbi/pkg/sip/status"
+        "github.com/KalbiProject/Kalbi/pkg/sip/method"
+        "github.com/KalbiProject/Kalbi/pkg/sip/transaction"
+        "github.com/KalbiProject/Kalbi/pkg/sip/message"
 )
 
 
@@ -95,11 +95,4 @@ func (p *Proxy) Start() {
 		go p.ServeRequests()
 		p.ServeResponses()
 	
-}
-
-
-
-func main(){
-   proxy := new(Proxy)
-   proxy.Start()
 }

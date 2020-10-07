@@ -1,8 +1,8 @@
 package main
 
-import "github.com/KalbiProject/KalbiProxy/pkg"
+import "KalbiProxy/pkg/proxy"
 
 func main(){
-	proxy := new(Proxy)
+	proxy := new(proxy.Proxy)
 	proxy.Start()
  }
