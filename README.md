@@ -1,1 +1,1 @@
-# Kalbi-SIPProxy-Demo
+# Kalbi-SIP-Proxy-Demo
