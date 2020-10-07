@@ -6,7 +6,7 @@
 
 ## What is KalbiProxy ?
 
-KalbiProxy is a SIP Proxy Server built using the Kalbi Framework/SDK
+KalbiProxy is a SIP Proxy/Registrar Server built using the Kalbi Framework/SDK
 
 This is not a production server (yet!) but it illustrates the usage of the Kalbi Framework/SDK
 
