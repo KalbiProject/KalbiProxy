@@ -1,6 +1,6 @@
 package main
 
-import "Kalbi-SIP-Proxy-Demo/pkg"
+import "github.com/KalbiProject/KalbiProxy/pkg"
 
 func main(){
 	proxy := new(Proxy)
