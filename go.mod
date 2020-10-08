@@ -1,5 +1,5 @@
 module KalbiProxy
 
-go 1.13
+go 1.15
 
-require github.com/KalbiProject/Kalbi v0.0.0-20201007201403-a5178a8c3af0
+require github.com/KalbiProject/Kalbi v0.0.1-alpha.4

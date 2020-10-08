@@ -1,5 +1,5 @@
-github.com/KalbiProject/Kalbi v0.0.0-20201007201403-a5178a8c3af0 h1:onnzbCAA9t/twX7HaFEovvpUrj+cphxGINycxBgJAAc=
-github.com/KalbiProject/Kalbi v0.0.0-20201007201403-a5178a8c3af0/go.mod h1:dkvdF/I4bz9HjghjAPuDG7ddFndBzs6VvJY9taspOtE=
+github.com/KalbiProject/Kalbi v0.0.1-alpha.4 h1:PaYsNtDfbtJMiAx1BnGMwZExD5Q6ohGrF5E48Lc1CKg=
+github.com/KalbiProject/Kalbi v0.0.1-alpha.4/go.mod h1:dkvdF/I4bz9HjghjAPuDG7ddFndBzs6VvJY9taspOtE=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/looplab/fsm v0.2.0 h1:M8hf5EF4AYLcT1FNKVUX8nu7D0xfp291iGeuigSxfrw=
 github.com/looplab/fsm v0.2.0/go.mod h1:p+IElwgCnAByqr2DWMuNbPjgMwqcHvTRZZn3dvKEke0=
