@@ -2,7 +2,7 @@ package main
 
 import "KalbiProxy/pkg/proxy"
 
-func main(){
+func main() {
 	proxy := new(proxy.Proxy)
 	proxy.Start()
- }
+}
