@@ -20,7 +20,7 @@ type Proxy struct {
 func (p *Proxy) HandleRequest(tx transaction.Transaction){
 	if string(tx.GetOrigin().Req.Method) == method.INVITE{
 	  
-		msg := message.NewResponse(status.StatusText(status.Trying), string(tx.GetOrigin().Contact.Host)+ "@" + string(tx.GetOrigin().Contact.Host), "@")
+		msg := message.NewResponse(status.Trying, string(tx.GetOrigin().Contact.Host)+ "@" + string(tx.GetOrigin().Contact.Host), "@")
 		msg.CopyHeaders(tx.GetOrigin())
 		msg.ContLen.SetValue("0")
         tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
@@ -28,7 +28,7 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction){
 	   
 		user, exists := p.RegisteredUsers[string(tx.GetOrigin().To.User)]
 		if(exists == false){
-			msg := message.NewResponse(status.StatusText(status.NotFound), "@", "@")
+			msg := message.NewResponse(status.NotFound, "@", "@")
 			msg.CopyHeaders(tx.GetOrigin())
 			tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 			
@@ -45,19 +45,19 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction){
 
 	}else if string(tx.GetOrigin().Req.Method) == method.REGISTER{
 		p.RegisteredUsers[string(tx.GetOrigin().Contact.User)] = string(tx.GetOrigin().Contact.Host) + ":" + string(tx.GetOrigin().Contact.Port)
-		msg := message.NewResponse(status.StatusText(status.OK), "@", "@")
+		msg := message.NewResponse(status.OK, "@", "@")
 		msg.CopyHeaders(tx.GetOrigin())
 		msg.ContLen.SetValue("0")
 		tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 
 	}else if string(tx.GetOrigin().Req.Method) == method.BYE{
-		msg := message.NewResponse(status.StatusText(status.OK), "@", "@")
+		msg := message.NewResponse(status.OK, "@", "@")
 		msg.CopyHeaders(tx.GetOrigin())
 		msg.ContLen.SetValue("0")
 		tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 
 	}else{
-		msg := message.NewResponse(status.StatusText(status.OK), "@", "@")
+		msg := message.NewResponse(status.OK, "@", "@")
 		msg.CopyHeaders(tx.GetOrigin())
 		msg.ContLen.SetValue("0")
 		tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
