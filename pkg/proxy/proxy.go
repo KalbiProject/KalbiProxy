@@ -7,6 +7,8 @@ import (
 	"github.com/KalbiProject/Kalbi/sip/method"
 	"github.com/KalbiProject/Kalbi/sip/status"
 	"github.com/KalbiProject/Kalbi/sip/transaction"
+	"net/http"
+	_ "net/http/pprof"
 	"strings"
 )
 
@@ -37,6 +39,7 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 			msg2.CopySdp(tx.GetOrigin())
 			TxMng := p.stack.GetTransactionManager()
 			ctx := TxMng.NewClientTransaction(msg)
+			ctx.SetServerTransaction(tx)
 			user := strings.Split(user, ":")
 			ctx.Send(msg2, user[0], user[1])
 
@@ -65,17 +68,21 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 
 }
 
-func (p *Proxy) AddToRegister(key string, contact string) {
-	p.RegisteredUsers[key] = contact
-}
-
-func (p *Proxy) FindUser(key string) {
-
-}
 
 func (p *Proxy) HandleResponse(response transaction.Transaction) {
-	fmt.Println(string(response.GetOrigin().Req.Src))
+	 if response.GetLastMessage().GetStatusCode() == 100 {
+         return
+	 } else {
+		  fmt.Println("I GET HERE ")
+		  tx := response.GetServerTransaction()
+		  tx.Send(response.GetLastMessage(), string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port) )
+	 }
 
+    
+}
+
+func (p *Proxy) AddToRegister(key string, contact string) {
+	p.RegisteredUsers[key] = contact
 }
 
 func (p *Proxy) ServeRequests() {
@@ -102,6 +109,8 @@ func (p *Proxy) Start() {
 	p.responseschannel = p.stack.CreateResponseChannel()
 	go p.stack.Start()
 	go p.ServeRequests()
+	go http.ListenAndServe("localhost:6060", nil)
+	
 	p.ServeResponses()
 
 }
