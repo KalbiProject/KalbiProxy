@@ -7,8 +7,6 @@ import (
 	"github.com/KalbiProject/Kalbi/sip/method"
 	"github.com/KalbiProject/Kalbi/sip/status"
 	"github.com/KalbiProject/Kalbi/sip/transaction"
-	"net/http"
-	_ "net/http/pprof"
 	"strings"
 )
 
@@ -20,7 +18,13 @@ type Proxy struct {
 }
 
 func (p *Proxy) HandleRequest(tx transaction.Transaction) {
-	if string(tx.GetOrigin().Req.Method) == method.INVITE {
+	if string(tx.GetLastMessage().Req.Method) == method.CANCEL {
+		msg := message.NewResponse(status.OK, string(tx.GetOrigin().To.User)+"@"+string(tx.GetOrigin().To.Host), string(tx.GetOrigin().From.User)+"@"+string(tx.GetOrigin().From.Host))
+		msg.CopyHeaders(tx.GetOrigin())
+		tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
+        
+	}
+	if string(tx.GetLastMessage().Req.Method) == method.INVITE {
 
 		msg := message.NewResponse(status.Trying, string(tx.GetOrigin().Contact.Host)+"@"+string(tx.GetOrigin().Contact.Host), "@")
 		msg.CopyHeaders(tx.GetOrigin())
@@ -37,9 +41,12 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 			msg2 := message.NewRequest(method.INVITE, string(tx.GetOrigin().To.User)+"@"+string(tx.GetOrigin().To.Host), string(tx.GetOrigin().From.User)+"@"+string(tx.GetOrigin().From.Host))
 			msg2.CopyHeaders(tx.GetOrigin())
 			msg2.CopySdp(tx.GetOrigin())
+			msg2.Via[0].SetBranch(transaction.GenerateBranchId())
+			msg2.Contact.Port = []byte("5060")
 			TxMng := p.stack.GetTransactionManager()
 			ctx := TxMng.NewClientTransaction(msg)
-			ctx.SetServerTransaction(tx)
+			ctx.ServerTxID = string(tx.GetOrigin().Via[0].Branch)
+			TxMng.PutTransaction(ctx)
 			user := strings.Split(user, ":")
 			ctx.Send(msg2, user[0], user[1])
 
@@ -70,12 +77,19 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 
 
 func (p *Proxy) HandleResponse(response transaction.Transaction) {
+
+	 
 	 if response.GetLastMessage().GetStatusCode() == 100 {
-         return
-	 } else {
+		 return
+		 
+	
+	 } else{
 		  fmt.Println("I GET HERE ")
 		  tx := response.GetServerTransaction()
-		  tx.Send(response.GetLastMessage(), string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port) )
+		  if tx == nil {
+			fmt.Println("Somthing is wrong")
+		  }
+		  //tx.Send(response.GetLastMessage(), string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port) )
 	 }
 
     
@@ -109,7 +123,7 @@ func (p *Proxy) Start() {
 	p.responseschannel = p.stack.CreateResponseChannel()
 	go p.stack.Start()
 	go p.ServeRequests()
-	go http.ListenAndServe("localhost:6060", nil)
+	
 	
 	p.ServeResponses()
 
