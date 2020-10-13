@@ -26,6 +26,8 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 		go p.HandleRegister(tx)
 	case method.BYE:
 		go p.HandleBye(tx)
+	case method.ACK:
+		
 	default:
 		msg := message.NewResponse(status.OK, "@", "@")
 		msg.CopyHeaders(tx.GetOrigin())

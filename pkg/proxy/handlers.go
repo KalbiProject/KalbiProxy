@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+func (p *Proxy) HandleAck(tx transaction.Transaction){
+	
+}
 
 func (p *Proxy) HandleRegister(tx transaction.Transaction){
 	p.RegisteredUsers[string(tx.GetOrigin().Contact.User)] = string(tx.GetOrigin().Contact.Host) + ":" + string(tx.GetOrigin().Contact.Port)
@@ -86,8 +89,10 @@ func (p *Proxy) Handle200(response transaction.Transaction){
 	  msg.CopyHeaders(response.GetLastMessage())
 	  msg.Via[0].SetBranch(tx.GetBranchID())
 	  msg.CopySdp(response.GetLastMessage())
+	  msg.Contact.Host = []byte("192.168.10.122")
+	  msg.Contact.Port = []byte("5060")
 	  //msg.ContLen.SetValue(strconv.Itoa(msg.Sdp.Size()))
 	  fmt.Println(string(msg.Export()))
-	  response.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
+	  tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 } 
 } 
