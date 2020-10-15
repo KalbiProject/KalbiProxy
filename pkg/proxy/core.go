@@ -72,11 +72,10 @@ func (p *Proxy) ServeResponses() {
 	}
 }
 
-func (p *Proxy) Start() {
+func (p *Proxy) Start(host string, port int) {
 	p.RegisteredUsers = make(map[string]string)
 	p.stack = kalbi.NewSipStack("Basic")
-	p.stack.CreateListenPoint("udp", "192.168.10.122", 5060)
-	//p.stack.CreateListenPoint("udp", "127.0.0.1", 5060)
+	p.stack.CreateListenPoint("udp", host, port)
 	p.requestschannel = p.stack.CreateRequestsChannel()
 	p.responseschannel = p.stack.CreateResponseChannel()
 	go p.stack.Start()
