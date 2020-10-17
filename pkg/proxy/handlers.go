@@ -6,14 +6,15 @@ import (
 	"github.com/KalbiProject/Kalbi/sip/method"
 	"github.com/KalbiProject/Kalbi/sip/status"
 	"github.com/KalbiProject/Kalbi/sip/transaction"
+	"github.com/KalbiProject/Kalbi/interfaces"
 	"strings"
 )
 
-func (p *Proxy) HandleAck(tx transaction.Transaction){
+func (p *Proxy) HandleAck(tx interfaces.Transaction){
 	
 }
 
-func (p *Proxy) HandleRegister(tx transaction.Transaction){
+func (p *Proxy) HandleRegister(tx interfaces.Transaction){
 	p.RegisteredUsers[string(tx.GetOrigin().Contact.User)] = string(tx.GetOrigin().Contact.Host) + ":" + string(tx.GetOrigin().Contact.Port)
 	msg := message.NewResponse(status.OK, "@", "@")
 	msg.CopyHeaders(tx.GetOrigin())
@@ -24,7 +25,7 @@ func (p *Proxy) HandleRegister(tx transaction.Transaction){
 
 
 
-func (p *Proxy) HandleInvite(tx transaction.Transaction){
+func (p *Proxy) HandleInvite(tx interfaces.Transaction){
 	msg := message.NewResponse(status.Trying, string(tx.GetOrigin().Contact.Host)+"@"+string(tx.GetOrigin().Contact.Host), "@")
 	msg.CopyHeaders(tx.GetOrigin())
 	msg.ContLen.SetValue("0")
@@ -58,21 +59,21 @@ func (p *Proxy) HandleInvite(tx transaction.Transaction){
 }
 
 
-func (p *Proxy) HandleCancel(tx transaction.Transaction){
+func (p *Proxy) HandleCancel(tx interfaces.Transaction){
     msg := message.NewResponse(status.OK, string(tx.GetOrigin().To.User)+"@"+string(tx.GetOrigin().To.Host), string(tx.GetOrigin().From.User)+"@"+string(tx.GetOrigin().From.Host))
 	msg.CopyHeaders(tx.GetOrigin())
 	tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 }
 
 
-func (p *Proxy) HandleBye(tx transaction.Transaction){
+func (p *Proxy) HandleBye(tx interfaces.Transaction){
 	msg := message.NewResponse(status.OK, "@", "@")
 	msg.CopyHeaders(tx.GetOrigin())
 	msg.ContLen.SetValue("0")
 	tx.Send(msg, string(tx.GetOrigin().Contact.Host), string(tx.GetOrigin().Contact.Port))
 }
 
-func (p *Proxy) Handle200(response transaction.Transaction){
+func (p *Proxy) Handle200(response interfaces.Transaction){
 	TxMng := p.stack.GetTransactionManager()
 	tx, exists := TxMng.FindServerTransactionByID(response.GetServerTransactionID())
 	if exists == false {

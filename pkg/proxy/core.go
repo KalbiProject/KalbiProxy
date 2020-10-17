@@ -2,21 +2,20 @@ package proxy
 
 import (
 	"github.com/KalbiProject/Kalbi"
+	"github.com/KalbiProject/Kalbi/interfaces"
 	"github.com/KalbiProject/Kalbi/sip/message"
 	"github.com/KalbiProject/Kalbi/sip/method"
 	"github.com/KalbiProject/Kalbi/sip/status"
-	"github.com/KalbiProject/Kalbi/sip/transaction"
 )
 
 type Proxy struct {
 	stack            *kalbi.SipStack
-	requestschannel  chan transaction.Transaction
-	responseschannel chan transaction.Transaction
 	RegisteredUsers  map[string]string
 }
 
-func (p *Proxy) HandleRequest(tx transaction.Transaction) {
+func (p *Proxy) HandleRequests(event interfaces.SipEventObject) {
 
+	tx := event.GetTransaction()
 	switch string(tx.GetLastMessage().Req.Method) {
 	case method.CANCEL:
 		go p.HandleCancel(tx)
@@ -38,7 +37,9 @@ func (p *Proxy) HandleRequest(tx transaction.Transaction) {
 }
 
 
-func (p *Proxy) HandleResponse(response transaction.Transaction) {
+func (p *Proxy) HandleResponses(event interfaces.SipEventObject) {
+
+	response := event.GetTransaction()
 
 	switch response.GetLastMessage().GetStatusCode() {
 	
@@ -56,32 +57,12 @@ func (p *Proxy) AddToRegister(key string, contact string) {
 	p.RegisteredUsers[key] = contact
 }
 
-func (p *Proxy) ServeRequests() {
-
-	for {
-		tx := <-p.requestschannel
-		p.HandleRequest(tx)
-	}
-
-}
-
-func (p *Proxy) ServeResponses() {
-	for {
-		tx := <-p.responseschannel
-		p.HandleResponse(tx)
-	}
-}
 
 func (p *Proxy) Start(host string, port int) {
 	p.RegisteredUsers = make(map[string]string)
 	p.stack = kalbi.NewSipStack("Basic")
 	p.stack.CreateListenPoint("udp", host, port)
-	p.requestschannel = p.stack.CreateRequestsChannel()
-	p.responseschannel = p.stack.CreateResponseChannel()
+	p.stack.SetSipListener(p)
 	go p.stack.Start()
-	go p.ServeRequests()
-	
-	
-	p.ServeResponses()
-
+	select{}//blocking action
 }
