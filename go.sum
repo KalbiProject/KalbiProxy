@@ -34,6 +34,8 @@ github.com/KalbiProject/Kalbi v0.0.1-alpha.64 h1:KzHi3F9yvUg2zhduYZ0+2dv5Kz88S3T
 github.com/KalbiProject/Kalbi v0.0.1-alpha.64/go.mod h1:dkvdF/I4bz9HjghjAPuDG7ddFndBzs6VvJY9taspOtE=
 github.com/KalbiProject/Kalbi v0.0.1-alpha.65 h1:XjRaV04Srbp5cwoPDA79vVUPN6rZhUCbAoTZNvN7tsU=
 github.com/KalbiProject/Kalbi v0.0.1-alpha.65/go.mod h1:dkvdF/I4bz9HjghjAPuDG7ddFndBzs6VvJY9taspOtE=
+github.com/KalbiProject/Kalbi v0.0.3-alpha.1 h1:tk7wiPCOUOp9Q3GzHhPrxF7S1PTHrWrXHzUOyMbpAKY=
+github.com/KalbiProject/Kalbi v0.0.3-alpha.1/go.mod h1:dkvdF/I4bz9HjghjAPuDG7ddFndBzs6VvJY9taspOtE=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
